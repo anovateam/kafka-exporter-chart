@@ -51,10 +51,11 @@ spec:
             - --tls.enabled
             {{- if .Values.kafkaExporter.tls.insecureSkipTlsVerify}}
             - --tls.insecure-skip-tls-verify
-            {{- else}}
+            {{- else }}
             - --tls.ca-file=/etc/tls-certs/ca-file
             - --tls.cert-file=/etc/tls-certs/cert-file
             - --tls.key-file=/etc/tls-certs/key-file
+            {{- end }}
             {{- end }}
             {{- if .Values.kafkaExporter.log }}
             - --log.level={{ .Values.kafkaExporter.log.level }}
