@@ -49,11 +49,12 @@ spec:
             {{- end }}
             {{- if .Values.kafkaExporter.tls.enabled}}
             - --tls.enabled
-            {{- if .Values.kafkaExporter.tls.certificates}}
+            {{- if .Values.kafkaExporter.tls.insecureSkipTlsVerify}}
+            - --tls.insecure-skip-tls-verify
+            {{- else}}
             - --tls.ca-file=/etc/tls-certs/ca-file
             - --tls.cert-file=/etc/tls-certs/cert-file
             - --tls.key-file=/etc/tls-certs/key-file
-            {{- end }}
             {{- end }}
             {{- if .Values.kafkaExporter.log }}
             - --log.level={{ .Values.kafkaExporter.log.level }}
@@ -86,7 +87,7 @@ spec:
             successThreshold: 1
             timeoutSeconds: 9
 
-          {{- if and .Values.kafkaExporter.tls.enabled .Values.kafkaExporter.tls.certificates }}
+          {{- if and .Values.kafkaExporter.tls.enabled not .Values.kafkaExporter.tls.insecureSkipTlsVerify }}
           volumeMounts:
           - name: tls-certs
             mountPath: "/etc/tls-certs/"
@@ -107,7 +108,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-    {{- if and .Values.kafkaExporter.tls.enabled .Values.kafkaExporter.tls.certificates }}
+    {{- if and .Values.kafkaExporter.tls.enabled not .Values.kafkaExporter.tls.insecureSkipTlsVerify }}
       volumes:
       - name: tls-certs
         secret:
