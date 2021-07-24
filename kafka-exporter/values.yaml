@@ -47,6 +47,7 @@ prometheus:
     interval: "30s"
     additionalLabels:
       app: kafka-exporter
+    metricRelabelings: {}
 
 labels: {}
 podLabels: {}
